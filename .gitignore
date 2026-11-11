@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+# saída do teste ponta a ponta
+e2e-out/
+# protótipo do artefato (tem caminhos locais)
+prototipo.html

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Círculo</title>
+<meta name="description" content="Registro de hábitos em três toques.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F9FAFD" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111933" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Círculo">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- TELA 1: registro (principal) -->
+  <section class="screen is-active" id="scr-home" aria-label="Tela principal">
+    <div class="bar">
+      <div>
+        <p class="eyebrow" id="today-label">Hoje</p>
+        <h1 class="h-screen">Hoje</h1>
+      </div>
+      <button class="icon-btn" id="btn-new" type="button" aria-label="Novo hábito">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </div>
+    <div class="stage">
+      <div class="porthole">
+        <div class="track" id="track" aria-label="Seus hábitos. Deslize pra trocar, segure pra editar."></div>
+        <button class="empty-add" id="empty-add" type="button" aria-label="Criar seu primeiro hábito" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+      <div class="pager" id="pager" aria-hidden="true"></div>
+      <div class="habit-meta">
+        <p class="habit-name" id="habit-name">Seu primeiro hábito</p>
+        <p class="habit-today" id="habit-today">Toque no círculo pra criar</p>
+      </div>
+      <ol class="week" id="week"></ol>
+    </div>
+    <button class="cta" id="btn-log" type="button">Registrar</button>
+  </section>
+
+  <!-- TELA 2: anel de tempo / repetições -->
+  <section class="screen" id="scr-log" aria-label="Registrar hábito">
+    <div class="bar">
+      <button class="icon-btn" id="log-back" type="button" aria-label="Voltar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <div class="log-title"><span id="log-emoji" aria-hidden="true"></span><span class="nm" id="log-name"></span></div>
+      <span class="bar-spacer"></span>
+    </div>
+    <div class="log-body">
+      <div class="dial-wrap" id="dial-wrap">
+        <svg id="dial" viewBox="0 0 300 300" role="slider" tabindex="0" aria-label="Duração" aria-valuemin="0" aria-valuemax="120" aria-valuenow="15">
+          <defs>
+            <radialGradient id="diskGrad" cx="35%" cy="30%" r="75%">
+              <stop offset="0" class="g-hi"/>
+              <stop offset="0.55" class="g-mid"/>
+              <stop offset="1" class="g-lo"/>
+            </radialGradient>
+          </defs>
+          <circle class="dial-disk" cx="150" cy="150" r="98" fill="url(#diskGrad)"/>
+          <g id="ticks"></g>
+          <circle class="dial-track" cx="150" cy="150" r="132"/>
+          <circle class="dial-arc" id="dial-arc" cx="150" cy="150" r="132" transform="rotate(-90 150 150)"/>
+          <circle class="dial-knob" id="dial-knob" cx="150" cy="18" r="13"/>
+        </svg>
+        <div class="dial-readout" aria-hidden="true">
+          <span class="num" id="dial-value">15</span>
+          <span class="unit" id="dial-unit">min</span>
+        </div>
+      </div>
+      <div class="steppers">
+        <button class="step-btn" id="dec" type="button" aria-label="Diminuir">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+        </button>
+        <p class="hint" id="dial-hint">Uma volta = 2 horas</p>
+        <button class="step-btn" id="inc" type="button" aria-label="Aumentar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="cta" id="btn-save" type="button">Salvar</button>
+  </section>
+
+  <!-- TELA 3: novo hábito / editar -->
+  <section class="screen" id="scr-new" aria-label="Novo hábito">
+    <div class="bar">
+      <button class="icon-btn" id="new-back" type="button" aria-label="Cancelar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <h1 class="h-screen sm" id="form-title">Novo hábito</h1>
+      <span class="bar-spacer"></span>
+    </div>
+    <form class="new-form" id="new-form" novalidate>
+      <div class="emoji-row">
+        <div class="emoji-disk">
+          <input id="emoji-input" name="emoji" type="text" inputmode="text" autocomplete="off" maxlength="16" placeholder="+" aria-label="Emoji do hábito">
+        </div>
+        <p class="emoji-help"><b>Toque no círculo</b> pra usar qualquer emoji do teclado, ou escolha um abaixo.</p>
+      </div>
+      <div class="emoji-grid" id="emoji-grid" role="radiogroup" aria-label="Sugestões de emoji"></div>
+      <label class="field" for="name-input">
+        <span class="lbl">Nome</span>
+        <input id="name-input" name="name" type="text" maxlength="24" autocomplete="off" enterkeyhint="done" placeholder="Ex.: Ler antes de dormir">
+      </label>
+      <fieldset class="seg">
+        <legend class="lbl">Como você mede</legend>
+        <div class="seg-opts">
+          <label class="seg-opt"><input type="radio" id="kind-time" name="kind" value="time" checked><span><b>Tempo</b><small>quanto durou</small></span></label>
+          <label class="seg-opt"><input type="radio" id="kind-reps" name="kind" value="reps"><span><b>Repetições</b><small>quantas vezes</small></span></label>
+        </div>
+        <p class="kind-note" id="kind-note" hidden>O tipo fica travado depois do primeiro registro.</p>
+      </fieldset>
+      <div class="form-actions">
+        <button class="cta" id="btn-create" type="submit" disabled>Criar hábito</button>
+        <button class="danger-btn" id="btn-delete" type="button" hidden>Apagar hábito</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span id="toast-msg"></span>
+    <button class="toast-action" id="toast-action" type="button" hidden>Desfazer</button>
+  </div>
+</div>
+<script src="app.js" defer></script>
+</body>
+</html>
